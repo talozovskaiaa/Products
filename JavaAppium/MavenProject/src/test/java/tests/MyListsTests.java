@@ -1,5 +1,8 @@
 package tests;
 
+import io.qameta.allure.*;
+import io.qameta.allure.junit4.DisplayName;
+
 import lib.CoreTestCase;
 import lib.Platform;
 import lib.ui.*;
@@ -7,9 +10,11 @@ import lib.ui.factories.ArticlePageObjectFactory;
 import lib.ui.factories.MyListPageObjectFactory;
 import lib.ui.factories.NavigationUIFactory;
 import lib.ui.factories.SearchPageObjectFactory;
+import org.junit.Assert;
 import org.junit.Test;
 import lib.ui.NavigationUI;
 
+@Epic("Tests for creating a folder and adding articles")
 public class MyListsTests extends CoreTestCase
 {
     public static final String name_of_folder = "New create list";
@@ -18,6 +23,11 @@ public class MyListsTests extends CoreTestCase
             password = "lozovskaya";
 
     @Test // Создание папки сохраненных, добавление и удаление статьи
+    @Features(value = {@Feature(value = "Search"), @Feature(value = "Article")})
+    @DisplayName("Create add and delete article")
+//    @Description("We create a folder, add an article and delete it")
+    @Step("Starting test testSaveFirstArticleToMyList")
+    @Severity(value = SeverityLevel.BLOCKER)
     public void testSaveFirstArticleToMyList()
     {
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
@@ -46,7 +56,7 @@ public class MyListsTests extends CoreTestCase
 
             ArticlePageObject.waitForTitleElement();
 
-            assertEquals("We are not on the same page after login",
+            Assert.assertEquals("We are not on the same page after login",
                     article_title,
                     ArticlePageObject.getArticleTitle()
             );
@@ -60,12 +70,17 @@ public class MyListsTests extends CoreTestCase
         MyListPageObject.HasElement();
 
         MyListPageObject.swipeByArticleToDelete("Java (programming language)");
-        assertFalse("Статья не должна быть в списке после удаления",
+        Assert.assertFalse("Статья не должна быть в списке после удаления",
                 MyListPageObject.isArticlePresent(article_title));
     }
 
     // Ex5 (Тема 5) (Тема 7) (Тема 10)
     @Test // Создание папки сохраненных, добавление и удаление статьи
+    @Features(value = {@Feature(value = "Search"), @Feature(value = "Article")})
+    @DisplayName("Create adding several articles and deleting one of them")
+//    @Description("We create a folder, add two articles, delete one of them")
+    @Step("Starting test testSaveToArticleToMyListAndDeleteOne")
+    @Severity(value = SeverityLevel.BLOCKER)
     public void testSaveToArticleToMyListAndDeleteOne()
     {
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
@@ -94,7 +109,7 @@ public class MyListsTests extends CoreTestCase
 
             articlePage.waitForTitleElement();
 
-            assertEquals("We are not on the same page after login",
+            Assert.assertEquals("We are not on the same page after login",
                     firstArticleTitle,
                     articlePage.getArticleTitle());
         }
@@ -124,10 +139,10 @@ public class MyListsTests extends CoreTestCase
             myListPageObject.hasFootersTextByArticle();
         }
 
-        assertFalse("Вторая статья должна быть удалена",
+        Assert.assertFalse("Вторая статья должна быть удалена",
                 myListPageObject.isArticlePresent(secondArticleTitle));
 
-        assertTrue("Первая статья должна остаться в списке",
+        Assert.assertTrue("Первая статья должна остаться в списке",
                 myListPageObject.isArticlePresent(firstArticleTitle));
     }
 }

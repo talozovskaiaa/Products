@@ -1,14 +1,23 @@
 package tests;
 
+import io.qameta.allure.*;
+import io.qameta.allure.junit4.DisplayName;
+
 import lib.CoreTestCase;
 import lib.ui.SearchPageObject;
 import lib.ui.factories.SearchPageObjectFactory;
 import org.junit.Assert;
 import org.junit.Test;
 
+@Epic("Test for search articles")
 public class SearchTests extends CoreTestCase {
 
     @Test // Тест на поиск названия поисковой строки
+    @Feature(value = "Search")
+    @DisplayName("Search article 'Java'")
+//    @Description("We search article 'Java'")
+    @Step("Starting test testSearch")
+    @Severity(value = SeverityLevel.BLOCKER)
     public void testSearch()
     {
 
@@ -20,6 +29,11 @@ public class SearchTests extends CoreTestCase {
     }
 
     @Test // Тест по очистке введенного слова и возращения назад
+    @Feature(value = "Search")
+    @DisplayName("Enter 'Java' in the line, clear it and go back")
+//    @Description("We enter 'Java' in the line, clear it and go back")
+    @Step("Starting test testCancelSearch")
+    @Severity(value = SeverityLevel.NORMAL)
     public void testCancelSearch()
     {
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
@@ -33,6 +47,11 @@ public class SearchTests extends CoreTestCase {
 
 
     @Test // Тест по добавлению Accert
+    @Feature(value = "Search")
+    @DisplayName("Count number of articles")
+//    @Description("We count the number of articles")
+    @Step("Starting test testAmountOfNotEmptySearch")
+    @Severity(value = SeverityLevel.NORMAL)
     public void testAmountOfNotEmptySearch()
     {
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
@@ -49,6 +68,11 @@ public class SearchTests extends CoreTestCase {
     }
 
     @Test
+    @Feature(value = "Search")
+    @DisplayName("Check the text if there are no articles")
+//    @Description("We check the text if there are no articles")
+    @Step("Starting test testAmountOfEmptySearch")
+    @Severity(value = SeverityLevel.NORMAL)
     public void testAmountOfEmptySearch()
     {
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
@@ -62,6 +86,11 @@ public class SearchTests extends CoreTestCase {
 
     // Ex3 (5 Тема)
     @Test
+    @Feature(value = "Search")
+    @DisplayName("Enter 'Java', search for two articles, clear it and go back")
+//    @Description("We enter 'Java', search for two articles, clear it and go back")
+    @Step("Starting test testCancel_search")
+    @Severity(value = SeverityLevel.NORMAL)
     public void testCancel_search()
     {
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
@@ -78,6 +107,11 @@ public class SearchTests extends CoreTestCase {
 
     // Ex6 (5 Тема)
     @Test // Тест на проверку title
+    @Feature(value = "Search")
+    @DisplayName("Open article 'Java' and compare the header")
+//    @Description("We open article 'Java' and compare the header")
+    @Step("Starting test testAssertElementPresent")
+    @Severity(value = SeverityLevel.BLOCKER)
     public void testAssertElementPresent() {
 
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);

@@ -1,6 +1,5 @@
 package lib.ui.Android;
 
-import io.appium.java_client.AppiumDriver;
 import lib.ui.SearchPageObject;
 import org.openqa.selenium.remote.RemoteWebDriver;
 

@@ -1,5 +1,7 @@
 package lib.ui;
 
+import io.qameta.allure.Attachment;
+import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.PointerInput;
@@ -9,6 +11,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import lib.Platform;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
@@ -27,9 +33,7 @@ public class MainPageObject {
         By by = this.getLocatorString(locator);
         WebDriverWait wait = new WebDriverWait(driver, timeoutIntSeconds);
         wait.withMessage(error_message + "\n");
-        return wait.until(
-                ExpectedConditions.presenceOfElementLocated(by)
-        );
+        return wait.until(ExpectedConditions.presenceOfElementLocated(by));
     }
 
     public WebElement waitForElementPresent(String locator, String error_message) {
@@ -48,9 +52,9 @@ public class MainPageObject {
         return element;
     }
 
-    public boolean waitForElementNotPresent(String locator, String error_message, long timeOutInSecond) {
+    public boolean waitForElementNotPresent(String locator, String error_message, long timeOutInSeconds) {
         By by = this.getLocatorString(locator);
-        WebDriverWait wait = new WebDriverWait(driver, timeOutInSecond);
+        WebDriverWait wait = new WebDriverWait(driver, timeOutInSeconds);
         wait.withMessage(error_message + "\n");
         return wait.until(
                 ExpectedConditions.invisibilityOfElementLocated(by)
@@ -295,7 +299,7 @@ public class MainPageObject {
         try {
             // Используем явное ожидание для поиска элементов
             By by = this.getLocatorString(locator);
-            WebDriverWait wait = new WebDriverWait(driver, 10);
+            WebDriverWait wait = new WebDriverWait(driver, 10); // Используем Duration.ofSeconds()
             List<WebElement> elements = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(by));
 
             // Возвращаем количество найденных элементов
@@ -345,5 +349,32 @@ public class MainPageObject {
         } else {
             throw new IllegalArgumentException("Cannot get type of locator. Locator " + locator_with_type);
         }
+    }
+
+    public String takeScreenshot(String name)
+    {
+        TakesScreenshot ts = (TakesScreenshot)this.driver;
+        File source = ts.getScreenshotAs(OutputType.FILE);
+        String path = System.getProperty("user.dir") + "/" + name + "_screenshot.png";
+        try {
+            FileUtils.copyFile(source, new File(path));
+            System.out.println("The screenshot was taken: " + path);
+        } catch (Exception e) {
+            System.out.println("Cannot take screenshot. Error: " + e.getMessage());
+        }
+        return path;
+    }
+
+    @Attachment
+    public static byte[] screenshot(String path)
+    {
+        byte[] bytes = new byte[0];
+
+        try {
+            bytes = Files.readAllBytes(Paths.get(path));
+        } catch (IOException e) {
+            System.out.println("Cannot get bytes from screenshot. Error: " + e.getMessage());
+        }
+        return bytes;
     }
 }
