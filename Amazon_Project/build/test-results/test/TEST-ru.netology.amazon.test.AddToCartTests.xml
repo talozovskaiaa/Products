@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="ru.netology.amazon.test.AddToCartTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-11-16T19:03:34" hostname="MacBook-Pro-Tatana.local" time="41.194">
+  <properties/>
+  <testcase name="Переход в Electronics → Camera &amp; Photo" classname="ru.netology.amazon.test.AddToCartTests" time="41.194"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

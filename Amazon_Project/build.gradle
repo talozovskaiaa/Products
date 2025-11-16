@@ -1,0 +1,72 @@
+plugins {
+    id 'java'
+    id 'io.qameta.allure' version '2.11.2'
+}
+
+group 'ru.netology'
+version '1.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = 11
+    targetCompatibility = 11
+}
+
+compileJava.options.encoding = "UTF-8"
+compileTestJava.options.encoding = "UTF-8"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    // File evn
+    testImplementation 'io.github.cdimascio:dotenv-java:3.0.0'
+
+    // Test Framework
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+
+    // Playwright
+    testImplementation 'com.microsoft.playwright:playwright:1.42.0'
+
+    // Faker for test data
+    testImplementation 'com.github.javafaker:javafaker:1.0.2'
+
+    // Lombok
+    testCompileOnly 'org.projectlombok:lombok:1.18.36'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.36'
+
+    // Logging
+    testImplementation 'org.slf4j:slf4j-simple:2.0.3'
+
+    // Allure
+    testImplementation 'io.qameta.allure:allure-junit5:2.27.0'
+}
+
+test {
+    useJUnitPlatform()
+    systemProperties System.getProperties()
+    systemProperties 'allure.results.directory': 'build/allure-results'
+
+    // Ограничиваем параллелизм для Playwright
+    maxParallelForks = 2
+
+    // Системные свойства для JUnit 5
+    systemProperties['junit.jupiter.execution.parallel.enabled'] = 'true'
+    systemProperties['junit.jupiter.execution.parallel.mode.default'] = 'concurrent'
+    systemProperties['junit.jupiter.execution.parallel.mode.classes.default'] = 'same_thread' // Важно!
+
+    testLogging {
+        events "passed", "skipped", "failed"
+        showStandardStreams = true
+    }
+}
+
+allure {
+    version = '2.27.0'
+    autoconfigure = true
+
+    useJUnit5 {
+        version = '2.27.0'
+    }
+}

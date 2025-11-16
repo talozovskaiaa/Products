@@ -1,0 +1,1 @@
+{"uuid":"097f0b40-6b89-4c74-b1b1-5d351a0ca53f","name":"DeliveryTests","children":["1180d79e-d59b-4c75-9509-3762b00b9364"],"befores":[{"name":"setupAll","status":"passed","stage":"finished","steps":[],"attachments":[],"parameters":[],"start":1762706067342,"stop":1762706067343}],"afters":[],"start":1762706067290,"stop":1762706092698}
