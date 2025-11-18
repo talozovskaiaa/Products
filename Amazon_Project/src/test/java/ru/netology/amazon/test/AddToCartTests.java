@@ -19,9 +19,9 @@ public class AddToCartTests {
     private HomePage homePage;
     private AddToCartPage addToCartPage;
 
-//    Dotenv dotenv = Dotenv.load();
-//    String login = dotenv.get("USER_EMAIL");
-//    String password = dotenv.get("USER_PASSWORD");
+    Dotenv dotenv = Dotenv.load();
+    String login = dotenv.get("USER_EMAIL");
+    String password = dotenv.get("USER_PASSWORD");
 
     @BeforeAll
     static void setupAll() {
@@ -49,9 +49,20 @@ public class AddToCartTests {
         addToCartPage.navigateToSection(
                 ELECTRONICS_SECTION,
                 PHOTO_SUBSECTION,
-                RESULT_PHOTO_SUBSECTION
+                RESULT_SUBSECTION
         );
         addToCartPage.addToCart(
+                ADD_TO_CART_FIRST_BUTTON
+        );
+    }
+
+    @Test
+    @DisplayName("Поиск 'Macbook Pro' и добавление в корзину")
+    void searchWithSearchField() {
+        homePage.loginWithValidUser(login, password);
+        addToCartPage.searchItem("Macbook Pro");
+        addToCartPage.addToCart(
+                ADD_TO_CART_BUTTON_FOR_MACBOOK
         );
     }
 }

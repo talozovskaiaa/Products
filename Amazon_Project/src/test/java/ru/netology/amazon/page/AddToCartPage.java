@@ -3,8 +3,6 @@ package ru.netology.amazon.page;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 
-import java.util.SplittableRandom;
-
 public class AddToCartPage {
 
     private final Page page;
@@ -12,11 +10,15 @@ public class AddToCartPage {
     public static final String NAVIGATION_MENU = "#nav-hamburger-menu";
     public static final String ELECTRONICS_SECTION = "a.hmenu-item:has-text(\"Electronics\")";
     public static final String PHOTO_SUBSECTION = "div[data-menu-id=\"6\"] a.hmenu-item:has-text(\"Camera & Photo\")";
-    public static final String RESULT_PHOTO_SUBSECTION = "h2.a-size-medium-plus:has-text(\"Results\")";
+    public static final String RESULT_SUBSECTION = "h2.a-size-medium-plus:has-text(\"Results\")";
     public static final String ADD_TO_CART_FIRST_BUTTON = "#a-autoid-1";
     public static final String CART_BUTTON = "#nav-cart";
     public static final String CART_PAGE = "#item-delete-button";
     public static final String NAV_CART = "#nav-cart";
+    public static final String SEARCH_FIELD = "#twotabsearchtextbox";
+    public static final String SEARCH_BUTTON ="#nav-search-submit-button";
+    public static final String ADD_TO_CART_BUTTON_FOR_MACBOOK = "#a-autoid-2-announce";
+    public static final String INCREASE_THE_NUMBER = "button[aria-label=\"Increase quantity by one\"]";
 
     public AddToCartPage(Page page) {
         this.page = page;
@@ -35,10 +37,14 @@ public class AddToCartPage {
     }
 
     // Добавление товара в корзину и переход в корзину
-    public void addToCart() {
-        page.locator(ADD_TO_CART_FIRST_BUTTON)
+    public void addToCart(String locatorByAddToCartButton) {
+        page.locator(locatorByAddToCartButton)
                 .first()
                 .click(new Locator.ClickOptions().setTimeout(10000));
+
+        page.locator(INCREASE_THE_NUMBER) //добавила
+                .first()
+                .click();
 
         Locator cart = page.locator(NAV_CART).first();
 
@@ -47,5 +53,13 @@ public class AddToCartPage {
         cart.click(new Locator.ClickOptions()
                 .setForce(true)
                 .setTimeout(10000));
+    }
+
+    public void searchItem(String items) {
+        page.locator(SEARCH_FIELD).waitFor(new Locator.WaitForOptions().setTimeout(10000));
+        page.locator(SEARCH_FIELD).click();
+        page.locator(SEARCH_FIELD).fill(items);
+        page.locator(SEARCH_BUTTON).click();
+        page.locator(RESULT_SUBSECTION).first().waitFor();
     }
 }
