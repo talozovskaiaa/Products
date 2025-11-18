@@ -48,13 +48,15 @@ public class HomePage {
         pageAfterSignOut.waitFor();
     }
 
-//    // Метод для проверки заголовка после авторизации
-//    public void validationText(String locator, String text) {
-//        Locator personalAccountHeader = page.locator(locator);
-//        personalAccountHeader.waitFor();
-//
-//        String headerText = personalAccountHeader.textContent();
-//        Assertions.assertTrue(headerText.contains(text),
-//                "Фактический текст: " + headerText);
-//    }
+    /*
+    // Метод для проверки заголовка после авторизации
+    public void validationText(String locator, String text) {
+        Locator personalAccountHeader = page.locator(locator);
+        personalAccountHeader.waitFor();
+
+        String headerText = personalAccountHeader.textContent();
+        Assertions.assertTrue(headerText.contains(text),
+                "Фактический текст: " + headerText);
+    }
+     */
 }

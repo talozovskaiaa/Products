@@ -16,7 +16,6 @@ public class AddToCartPage {
     public static final String ADD_TO_CART_FIRST_BUTTON = "#a-autoid-1";
     public static final String CART_BUTTON = "#nav-cart";
     public static final String CART_PAGE = "#item-delete-button";
-    //public static final String ADD_TO_CART_BUTTON = "#add-to-cart-button";
     public static final String NAV_CART = "#nav-cart";
 
     public AddToCartPage(Page page) {
@@ -37,20 +36,16 @@ public class AddToCartPage {
 
     // Добавление товара в корзину и переход в корзину
     public void addToCart() {
-        // Ждём и жмём "Add to Cart"
         page.locator(ADD_TO_CART_FIRST_BUTTON)
                 .first()
                 .click(new Locator.ClickOptions().setTimeout(10000));
 
-        // Берём иконку корзины
         Locator cart = page.locator(NAV_CART).first();
 
-        // Прокручиваем к ней страницу
         cart.scrollIntoViewIfNeeded();
 
-        // ⚠ Игнорируем actionability-чек 'outside of viewport'
         cart.click(new Locator.ClickOptions()
-                .setForce(true)      // ВАЖНО: кликаем даже если Playwright думает, что элемент вне вьюпорта
+                .setForce(true)
                 .setTimeout(10000));
     }
 }
