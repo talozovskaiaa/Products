@@ -44,14 +44,6 @@ public class MainPage {
         return page;
     }
 
-    public Browser getBrowser() {
-        return browser;
-    }
-
-    public Playwright getPlaywright() {
-        return playwright;
-    }
-
     public void tearDown() {
 
         if (browser != null) {

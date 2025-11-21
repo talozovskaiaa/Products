@@ -5,19 +5,19 @@ import io.github.cdimascio.dotenv.Dotenv;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.ResourceLock;
 import org.junit.jupiter.api.parallel.Resources;
-import ru.netology.amazon.page.AddToCartPage;
 import ru.netology.amazon.page.HomePage;
 import ru.netology.amazon.page.MainPage;
+import ru.netology.amazon.page.ShoppingCartPage;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
-import static ru.netology.amazon.page.AddToCartPage.*;
+import static ru.netology.amazon.page.ShoppingCartPage.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 public class AddToCartTests {
     private static MainPage mainPage;
 
     private HomePage homePage;
-    private AddToCartPage addToCartPage;
+    private ShoppingCartPage shoppingCartPage;
 
     Dotenv dotenv = Dotenv.load();
     String login = dotenv.get("USER_EMAIL");
@@ -33,7 +33,7 @@ public class AddToCartTests {
     public void setup() {
         Page page = mainPage.setUP();
         homePage = new HomePage(page);
-        addToCartPage = new AddToCartPage(page);
+        shoppingCartPage = new ShoppingCartPage(page);
 
         assertThat(mainPage.getPage()).hasURL(mainPage.getBaseUrl());
     }
@@ -46,12 +46,12 @@ public class AddToCartTests {
     @Test
     @DisplayName("Переход в Electronics → Camera & Photo")
     void searchAndGoToTheElectronicsSection() {
-        addToCartPage.navigateToSection(
+        shoppingCartPage.navigateToSection(
                 ELECTRONICS_SECTION,
                 PHOTO_SUBSECTION,
                 RESULT_SUBSECTION
         );
-        addToCartPage.addToCart(
+        shoppingCartPage.addToCart(
                 ADD_TO_CART_FIRST_BUTTON
         );
     }
@@ -60,8 +60,8 @@ public class AddToCartTests {
     @DisplayName("Поиск 'Macbook Pro' и добавление в корзину")
     void searchWithSearchField() {
         homePage.loginWithValidUser(login, password);
-        addToCartPage.searchItem("Macbook Pro");
-        addToCartPage.addToCart(
+        shoppingCartPage.searchItem("Macbook Pro");
+        shoppingCartPage.addToCart(
                 ADD_TO_CART_BUTTON_FOR_MACBOOK
         );
     }
