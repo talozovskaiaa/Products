@@ -54,7 +54,7 @@ public class ShoppingCartPage {
 
         waitForAddToCartConfirmation();
 
-        page.locator(INCREASE_THE_NUMBER) //добавила
+        page.locator(INCREASE_THE_NUMBER)
                 .first()
                 .click(new Locator.ClickOptions().setTimeout(5000));
 

@@ -27,6 +27,7 @@
 # Конкретный тестовый класс
 ./gradlew test --tests "SignInTests"
 ./gradlew test --tests "AddToCartTests"
+./gradlew test --tests "SignInTests"
 
 # С генерацией отчета
 ./gradlew test --scan

@@ -3,6 +3,8 @@ package ru.netology.amazon.page;
 import com.microsoft.playwright.*;
 import io.github.cdimascio.dotenv.Dotenv;
 
+import java.nio.file.Paths;
+
 public class MainPage {
 
     Playwright playwright;
@@ -32,7 +34,7 @@ public class MainPage {
         browser = playwright.chromium().launch(new BrowserType.LaunchOptions()
                 .setHeadless(false));
 
-        page = browser.newPage(); /// добавила только что
+        page = browser.newPage();
         page.navigate(baseUrl);
         page.setDefaultTimeout(5000);
 
@@ -53,6 +55,27 @@ public class MainPage {
             playwright.close();
         }
         tearDownAllureReports();
+    }
+
+    public Page setUPWithStorageState(String stateFile) {
+        setupAllureReports();
+
+        Dotenv dotenv = Dotenv.load();
+        baseUrl = dotenv.get("BASE_URL");
+
+        playwright = Playwright.create();
+        browser = playwright.chromium().launch(new BrowserType.LaunchOptions()
+                .setHeadless(false));
+
+        BrowserContext context = browser.newContext(
+                new Browser.NewContextOptions().setStorageStatePath(Paths.get(stateFile))
+        );
+
+        page = context.newPage();
+        page.navigate(baseUrl);
+        page.setDefaultTimeout(5000);
+
+        return page;
     }
 
 }

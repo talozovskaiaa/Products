@@ -1,39 +1,35 @@
-HELP.md
-.gradle
-.env
+# Gradle
+.gradle/
 build/
-/build/
 !gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**
-!**/src/test/**
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-
-### IntelliJ IDEA ###
-.idea
+# IntelliJ IDEA
+.idea/
 *.iws
 *.iml
 *.ipr
 out/
 
-### NetBeans ###
+# Eclipse
+.classpath
+.factorypath
+.project
+.settings/
+.apt_generated
+.springBeans
+.sts4-cache
+
+# NetBeans
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
 
-### VS Code ###
+# VS Code
 .vscode/
 
-### Package Files ###
+# Package Files
 *.jar
 *.war
 *.nar
@@ -42,7 +38,28 @@ out/
 *.tar.gz
 *.rar
 
-### Environment variables ###
+# Environment variables
 .env
 *.env
-.env.*.env
+.env.*
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Playwright
+playwright-report/
+test-results/
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+*.tmp
+*.temp
