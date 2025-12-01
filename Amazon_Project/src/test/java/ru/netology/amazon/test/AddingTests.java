@@ -10,6 +10,7 @@ import ru.netology.amazon.page.HomePage;
 import ru.netology.amazon.page.MainPage;
 import ru.netology.amazon.page.RemoveAllServicesExample;
 import ru.netology.amazon.page.ShoppingCartPage;
+import io.qameta.allure.*;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -91,6 +92,7 @@ public class AddingTests {
 
     @Test
     @DisplayName("Поиск 'Macbook Pro' и добавление в корзину")
+    @Severity(SeverityLevel.BLOCKER)
     void searchWithSearchField() {
         shoppingCartPage.searchItem("Macbook Pro");
         shoppingCartPage.addToCart(
@@ -100,6 +102,7 @@ public class AddingTests {
 
     @Test
     @DisplayName("Проверка очистки корзины методом removeAll")
+    @Severity(SeverityLevel.BLOCKER)
     void testRemoveAllMethod() throws InterruptedException {
         // 1. Добавить товары в корзину
         shoppingCartPage.navigateToSection(

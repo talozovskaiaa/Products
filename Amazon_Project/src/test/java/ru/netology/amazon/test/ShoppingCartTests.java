@@ -9,6 +9,7 @@ import org.junit.jupiter.api.parallel.Resources;
 import ru.netology.amazon.page.HomePage;
 import ru.netology.amazon.page.MainPage;
 import ru.netology.amazon.page.ShoppingCartPage;
+import io.qameta.allure.*;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -62,6 +63,7 @@ public class ShoppingCartTests {
 
     @Test
     @DisplayName("Удаление 'Macbook Pro' из корзины")
+    @Severity(SeverityLevel.BLOCKER)
     void removingAnItemFromTheCart() {
         shoppingCartPage.searchItem("Macbook Pro");
         shoppingCartPage.addToCart(
@@ -75,6 +77,7 @@ public class ShoppingCartTests {
 
     @Test
     @DisplayName("Уменьшение товара на 1 и оформление заказа")
+    @Severity(SeverityLevel.BLOCKER)
     void proceedToCheckoutAction() {
         shoppingCartPage.searchItem("Macbook Pro");
         shoppingCartPage.addToCart(

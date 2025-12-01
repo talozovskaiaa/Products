@@ -9,6 +9,7 @@ import org.junit.jupiter.api.parallel.Resources;
 import ru.netology.amazon.page.HomePage;
 import ru.netology.amazon.page.MainPage;
 import ru.netology.amazon.page.ShoppingCartPage;
+import io.qameta.allure.*;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -63,6 +64,7 @@ public class RemovingTests {
 
     @Test
     @DisplayName("Removing an item from the cart")
+    @Severity(SeverityLevel.BLOCKER)
     void removingAnItemFromTheCart() {
         shoppingCartPage.deleteAnItemsFromTheCart("input[data-action=\"delete-active\"][type=\"submit\"]", "sc-list-item-removed-msg-text-delete-5e80513f-c676-4c8a-bc75-17b8d0bc6804");
     }
