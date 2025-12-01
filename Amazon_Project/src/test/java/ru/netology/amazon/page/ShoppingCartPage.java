@@ -3,6 +3,8 @@ package ru.netology.amazon.page;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 
+import java.util.List;
+
 public class ShoppingCartPage {
 
     private final Page page;
@@ -49,14 +51,14 @@ public class ShoppingCartPage {
     // Добавление товара в корзину и переход в корзину
     public void addToCart(String locatorByAddToCartButton) {
         page.locator(locatorByAddToCartButton)
-                .first()
+//                .first()
                 .click(new Locator.ClickOptions().setTimeout(10000));
 
-        waitForAddToCartConfirmation();
+//        waitForAddToCartConfirmation();
 
-        page.locator(INCREASE_THE_NUMBER)
-                .first()
-                .click(new Locator.ClickOptions().setTimeout(5000));
+//        page.locator(INCREASE_THE_NUMBER)
+//                .first()
+//                .click(new Locator.ClickOptions().setTimeout(5000));
 
         page.evaluate("window.scrollTo(0, 0)");
         page.waitForTimeout(1000);
@@ -64,6 +66,7 @@ public class ShoppingCartPage {
         navigateToCart();
     }
 
+    // Поиск товара
     public void searchItem(String items) {
         page.locator(SEARCH_FIELD).waitFor(new Locator.WaitForOptions().setTimeout(10000));
         page.locator(SEARCH_FIELD).click();
@@ -110,5 +113,18 @@ public class ShoppingCartPage {
         element.scrollIntoViewIfNeeded();
         element.waitFor();
         element.click();
+    }
+
+    public int getCartItemsCount() {
+        // Локатор для счетчика товаров в корзине
+        return Integer.parseInt(page.locator("#nav-cart-count").innerText());
+    }
+
+    public boolean isCartEmptyMessageDisplayed() {
+        return page.locator("h3:has-text('Your Amazon Cart is empty')").isVisible();
+    }
+
+    public List<String> getCartItemsTitles() {
+        return page.locator("[data-name='Active Items'] .sc-product-title").allInnerTexts();
     }
 }
