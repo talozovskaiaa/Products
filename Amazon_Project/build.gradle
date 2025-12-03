@@ -1,14 +1,18 @@
 plugins {
     id 'java'
     id 'io.qameta.allure' version '2.11.2'
+    id 'idea'
 }
 
 group 'ru.netology'
 version '1.0-SNAPSHOT'
 
 java {
-    sourceCompatibility = 11
-    targetCompatibility = 11
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
 
 compileJava.options.encoding = "UTF-8"
@@ -18,16 +22,24 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
+configurations {
+    playwrightBrowsers
+}
 
-    // File evn
-    testImplementation 'io.github.cdimascio:dotenv-java:3.0.0'
+dependencies {
+    // File env
+    implementation 'io.github.cdimascio:dotenv-java:3.0.0'
 
     // Test Framework
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+    testImplementation platform('org.junit:junit-bom:5.10.2')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params'
+    testImplementation 'org.junit.platform:junit-platform-suite'
 
     // Playwright
     testImplementation 'com.microsoft.playwright:playwright:1.42.0'
+    implementation 'com.microsoft.playwright:playwright:1.42.0'
+    playwrightBrowsers 'com.microsoft.playwright:driver-bundle:1.42.0'
 
     // Faker for test data
     testImplementation 'com.github.javafaker:javafaker:1.0.2'
@@ -40,33 +52,340 @@ dependencies {
     testImplementation 'org.slf4j:slf4j-simple:2.0.3'
 
     // Allure
-    testImplementation 'io.qameta.allure:allure-junit5:2.27.0'
+    testImplementation platform('io.qameta.allure:allure-bom:2.27.0')
+    testImplementation 'io.qameta.allure:allure-junit5'
+    testImplementation 'io.qameta.allure:allure-attachments'
+
+    // Assertions
+    testImplementation 'org.assertj:assertj-core:3.25.3'
+    testImplementation 'org.awaitility:awaitility:4.2.0'
 }
+
+// ============ ОСНОВНЫЕ ТЕСТЫ ============
 
 test {
     useJUnitPlatform()
+
+    // Получаем системные свойства
     systemProperties System.getProperties()
-    systemProperties 'allure.results.directory': 'build/allure-results'
 
-    // Ограничиваем параллелизм для Playwright
-    maxParallelForks = 2
+    // Устанавливаем дефолтные значения для Playwright
+    systemProperty 'headless', System.getProperty('headless', 'true')
+    systemProperty 'browser', System.getProperty('browser', 'chromium')
+    systemProperty 'slowMo', System.getProperty('slowMo', '0')
+    systemProperty 'video', System.getProperty('video', 'off')
 
-    // Системные свойства для JUnit 5
-    systemProperties['junit.jupiter.execution.parallel.enabled'] = 'true'
-    systemProperties['junit.jupiter.execution.parallel.mode.default'] = 'concurrent'
-    systemProperties['junit.jupiter.execution.parallel.mode.classes.default'] = 'same_thread' // Важно!
+    // Настройки параллельного выполнения JUnit
+    systemProperty 'junit.jupiter.execution.parallel.enabled', 'true'
+    systemProperty 'junit.jupiter.execution.parallel.mode.default', 'concurrent'
+    systemProperty 'junit.jupiter.execution.parallel.mode.classes.default', 'same_thread'
+    systemProperty 'junit.jupiter.execution.parallel.config.strategy', 'fixed'
+    systemProperty 'junit.jupiter.execution.parallel.config.fixed.parallelism', '2'
+
+    // Ограничиваем параллелизм для Playwright (Gradle-level)
+    maxParallelForks = System.getProperty('maxParallelForks', '2') as Integer
+
+    // Настройки JVM для тестов
+    jvmArgs = [
+            '-Xmx512m',
+            '-XX:MaxMetaspaceSize=256m',
+            '-Dfile.encoding=UTF-8',
+            '-Duser.country=RU',
+            '-Duser.language=ru'
+    ]
 
     testLogging {
-        events "passed", "skipped", "failed"
-        showStandardStreams = true
+        events "passed", "skipped", "failed", "standard_out", "standard_error"
+        exceptionFormat "full"
+        showCauses true
+        showExceptions true
+        showStackTraces true
+    }
+
+    reports {
+        html.required = true
+        junitXml.required = true
+    }
+
+    // Фильтрация тестов по тегам
+    useJUnitPlatform {
+        if (System.getProperty('excludeTags')) {
+            excludeTags System.getProperty('excludeTags')
+        }
+        if (System.getProperty('includeTags')) {
+            includeTags System.getProperty('includeTags')
+        }
+    }
+
+    // Создание директорий для артефактов
+    doFirst {
+        file("${buildDir}/screenshots").mkdirs()
+        file("${buildDir}/videos").mkdirs()
+        file("${buildDir}/traces").mkdirs()
+        file("${buildDir}/playwright-report").mkdirs()
+        file("${buildDir}/allure-results").mkdirs()
     }
 }
+
+// ============ УСТАНОВКА БРАУЗЕРОВ ============
+
+tasks.register('playwrightInstall', JavaExec) {
+    description = 'Install Playwright browsers'
+    classpath = configurations.playwrightBrowsers
+    mainClass = 'com.microsoft.playwright.CLI'
+    args 'install'
+    args '--with-deps'
+}
+
+tasks.register('playwrightInstallChromium', JavaExec) {
+    description = 'Install only Chromium browser'
+    classpath = configurations.playwrightBrowsers
+    mainClass = 'com.microsoft.playwright.CLI'
+    args 'install', 'chromium'
+}
+
+// ============ ЗАДАЧИ ДЛЯ ТЕСТОВ С РАЗНЫМИ БРАУЗЕРАМИ ============
+
+tasks.register('testChromium', Test) {
+    useJUnitPlatform()
+    systemProperty 'browser', 'chromium'
+    systemProperty 'headless', 'true'
+    description = 'Run tests with Chromium browser'
+    group = 'verification'
+}
+
+tasks.register('testFirefox', Test) {
+    useJUnitPlatform()
+    systemProperty 'browser', 'firefox'
+    systemProperty 'headless', 'true'
+    description = 'Run tests with Firefox browser'
+    group = 'verification'
+}
+
+tasks.register('testWebkit', Test) {
+    useJUnitPlatform()
+    systemProperty 'browser', 'webkit'
+    systemProperty 'headless', 'true'
+    description = 'Run tests with Webkit browser'
+    group = 'verification'
+}
+
+tasks.register('testAllBrowsers') {
+    dependsOn testChromium, testFirefox, testWebkit
+    description = 'Run tests in all browsers sequentially'
+    group = 'verification'
+}
+
+// ============ ПАРАЛЛЕЛЬНЫЙ ЗАПУСК БРАУЗЕРОВ ============
+
+// Основная задача для параллельного запуска
+tasks.register('runParallelTests', JavaExec) {
+    description = 'Run tests in multiple browsers parallel'
+    group = 'verification'
+
+    // Main класс для запуска
+    mainClass = 'ru.netology.amazon.ParallelRunner'
+    classpath = sourceSets.main.runtimeClasspath
+
+    // Наследуем системные свойства
+    systemProperties System.getProperties()
+
+    // Дефолтные значения
+    systemProperty 'headless', System.getProperty('headless', 'true')
+    systemProperty 'browser', System.getProperty('browser', 'chromium')
+    systemProperty 'baseUrl', System.getProperty('baseUrl', 'https://www.amazon.com')
+    systemProperty 'threads', System.getProperty('threads', '3')
+    systemProperty 'slowMo', System.getProperty('slowMo', '0')
+    systemProperty 'video', System.getProperty('video', 'off')
+    systemProperty 'screenshot.dir', "${buildDir}/screenshots"
+    systemProperty 'video.dir', "${buildDir}/videos"
+
+    // Зависит от установки браузеров
+    dependsOn 'playwrightInstall'
+
+    // Создание директорий для артефактов
+    doFirst {
+        println "=== Parallel Browser Tests ==="
+        println "Browsers: ${System.getProperty('browser', 'chromium')}"
+        println "Threads: ${System.getProperty('threads', '3')}"
+        println "Headless: ${System.getProperty('headless', 'true')}"
+        println "============================="
+
+        file("${buildDir}/screenshots").mkdirs()
+        file("${buildDir}/videos").mkdirs()
+        file("${buildDir}/parallel-logs").mkdirs()
+    }
+}
+
+// Параллельный запуск всех браузеров
+tasks.register('runParallelAll', JavaExec) {
+    description = 'Run tests in ALL browsers parallel'
+    group = 'verification'
+    mainClass = 'ru.netology.amazon.ParallelRunner'
+    classpath = sourceSets.main.runtimeClasspath
+    systemProperty 'browser', 'all'
+    systemProperty 'headless', System.getProperty('headless', 'true')
+    systemProperty 'threads', '3'
+    dependsOn 'playwrightInstall'
+}
+
+// Параллельный запуск нескольких браузеров
+tasks.register('runParallelChromiumFirefox', JavaExec) {
+    description = 'Run tests in Chromium and Firefox parallel'
+    group = 'verification'
+    mainClass = 'ru.netology.amazon.ParallelRunner'
+    classpath = sourceSets.main.runtimeClasspath
+    systemProperty 'browser', 'chromium,firefox'
+    systemProperty 'headless', System.getProperty('headless', 'true')
+    systemProperty 'threads', '2'
+    dependsOn 'playwrightInstall'
+}
+
+// Индивидуальные задачи для каждого браузера (параллельная версия)
+tasks.register('runParallelChromium', JavaExec) {
+    description = 'Run single browser parallel test (Chromium)'
+    group = 'verification'
+    mainClass = 'ru.netology.amazon.ParallelRunner'
+    classpath = sourceSets.main.runtimeClasspath
+    systemProperty 'browser', 'chromium'
+    systemProperty 'headless', System.getProperty('headless', 'true')
+    dependsOn 'playwrightInstall'
+}
+
+tasks.register('runParallelFirefox', JavaExec) {
+    description = 'Run single browser parallel test (Firefox)'
+    group = 'verification'
+    mainClass = 'ru.netology.amazon.ParallelRunner'
+    classpath = sourceSets.main.runtimeClasspath
+    systemProperty 'browser', 'firefox'
+    systemProperty 'headless', System.getProperty('headless', 'true')
+    dependsOn 'playwrightInstall'
+}
+
+tasks.register('runParallelWebkit', JavaExec) {
+    description = 'Run single browser parallel test (Webkit)'
+    group = 'verification'
+    mainClass = 'ru.netology.amazon.ParallelRunner'
+    classpath = sourceSets.main.runtimeClasspath
+    systemProperty 'browser', 'webkit'
+    systemProperty 'headless', System.getProperty('headless', 'true')
+    dependsOn 'playwrightInstall'
+}
+
+// ============ ЗАДАЧИ ДЛЯ РЕГУЛЯРНОГО ЗАПУСКА ============
+
+tasks.register('runTests', Test) {
+    description = 'Run tests with default configuration'
+    group = 'verification'
+    dependsOn test
+}
+
+tasks.register('testDebug', Test) {
+    useJUnitPlatform()
+    systemProperty 'headless', 'false'
+    systemProperty 'slowMo', '1000'
+    systemProperty 'browser', System.getProperty('browser', 'chromium')
+    description = 'Run tests in visible mode for debugging'
+    group = 'verification'
+}
+
+// ============ ALLURE КОНФИГУРАЦИЯ ============
 
 allure {
     version = '2.27.0'
     autoconfigure = true
+    aspectjweaver = true
 
     useJUnit5 {
         version = '2.27.0'
+    }
+}
+
+// ============ IDEA КОНФИГУРАЦИЯ ============
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+        inheritOutputDirs = true
+    }
+}
+
+// ============ КОМПИЛЯЦИЯ ============
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.compilerArgs += [
+            '-parameters',
+            '-Xlint:unchecked',
+            '-Xlint:deprecation'
+    ]
+}
+
+// ============ CLEAN ЗАДАЧА ============
+
+clean {
+    delete "${buildDir}/screenshots"
+    delete "${buildDir}/videos"
+    delete "${buildDir}/traces"
+    delete "${buildDir}/playwright-report"
+    delete "${buildDir}/allure-results"
+    delete "${buildDir}/parallel-logs"
+    delete "${buildDir}/reports"
+}
+
+// ============ ДОПОЛНИТЕЛЬНЫЕ УТИЛИТЫ ============
+
+// Задача для просмотра доступных браузеров
+tasks.register('showBrowsers', JavaExec) {
+    description = 'Show installed Playwright browsers'
+    group = 'help'
+    classpath = configurations.playwrightBrowsers
+    mainClass = 'com.microsoft.playwright.CLI'
+    args '--version'
+}
+
+// Задача для проверки окружения
+tasks.register('checkEnvironment') {
+    description = 'Check testing environment'
+    group = 'help'
+
+    doLast {
+        println "=== Environment Check ==="
+        println "Java version: ${JavaVersion.current()}"
+        println "Project dir: ${projectDir}"
+        println "Build dir: ${buildDir}"
+        println "Source compatibility: ${sourceCompatibility}"
+        println "Target compatibility: ${targetCompatibility}"
+        println "Available processors: ${Runtime.getRuntime().availableProcessors()}"
+        println "========================="
+    }
+}
+
+// Зависимости между задачами
+tasks.named('test') {
+    mustRunAfter 'playwrightInstall'
+}
+
+// Автоматическая генерация отчета после тестов
+tasks.named('test') {
+    finalizedBy 'allureReport'  // Эта задача создается плагином Allure автоматически
+}
+
+tasks.named('runParallelTests') {
+    finalizedBy 'allureReport'  // Используем стандартную задачу от Allure
+}
+
+// Настройка для сохранения Allure результатов от параллельных тестов
+tasks.named('runParallelTests') {
+    doLast {
+        // Копируем результаты в директорию Allure
+        def allureResultsDir = file("${buildDir}/allure-results")
+        def parallelResultsDir = file("${buildDir}/parallel-logs")
+
+        if (parallelResultsDir.exists() && parallelResultsDir.listFiles()) {
+            println "Copying parallel test results to Allure..."
+            // Здесь можно добавить логику копирования результатов
+        }
     }
 }

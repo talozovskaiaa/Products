@@ -8,6 +8,7 @@ import org.junit.jupiter.api.parallel.Resources;
 import ru.netology.amazon.page.HomePage;
 import ru.netology.amazon.page.MainPage;
 import io.qameta.allure.*;
+import ru.netology.amazon.utils.ThreadManager;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
@@ -46,6 +47,7 @@ class SignInTests {
     @DisplayName("Successful authorization")
     @Severity(SeverityLevel.BLOCKER)
     void sighIn() {
+        ThreadManager.runAmazonTests();
         homePage.loginWithValidUser(login, password);
     }
 
@@ -53,8 +55,8 @@ class SignInTests {
     @DisplayName("Successful unauthorization")
     @Severity(SeverityLevel.BLOCKER)
     void sighOut() {
+        ThreadManager.runAmazonTests();
         homePage.loginWithValidUser(login, password);
         homePage.sighOut();
     }
-
 }

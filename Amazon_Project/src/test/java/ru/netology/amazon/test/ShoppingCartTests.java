@@ -10,6 +10,7 @@ import ru.netology.amazon.page.HomePage;
 import ru.netology.amazon.page.MainPage;
 import ru.netology.amazon.page.ShoppingCartPage;
 import io.qameta.allure.*;
+import ru.netology.amazon.utils.ThreadManager;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -65,6 +66,7 @@ public class ShoppingCartTests {
     @DisplayName("Удаление 'Macbook Pro' из корзины")
     @Severity(SeverityLevel.BLOCKER)
     void removingAnItemFromTheCart() {
+        ThreadManager.runAmazonTests();
         shoppingCartPage.searchItem("Macbook Pro");
         shoppingCartPage.addToCart(
                 ADD_TO_CART_BUTTON_FOR_MACBOOK
@@ -79,6 +81,7 @@ public class ShoppingCartTests {
     @DisplayName("Уменьшение товара на 1 и оформление заказа")
     @Severity(SeverityLevel.BLOCKER)
     void proceedToCheckoutAction() {
+        ThreadManager.runAmazonTests();
         shoppingCartPage.searchItem("Macbook Pro");
         shoppingCartPage.addToCart(
                 ADD_TO_CART_BUTTON_FOR_MACBOOK
@@ -91,5 +94,4 @@ public class ShoppingCartTests {
                 "12"
         );
     }
-
 }

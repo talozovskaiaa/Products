@@ -11,6 +11,7 @@ import ru.netology.amazon.page.MainPage;
 import ru.netology.amazon.page.RemoveAllServicesExample;
 import ru.netology.amazon.page.ShoppingCartPage;
 import io.qameta.allure.*;
+import ru.netology.amazon.utils.ThreadManager;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -80,6 +81,7 @@ public class AddingTests {
     @Test
     @DisplayName("Переход в Electronics → Camera & Photo")
     void searchAndGoToTheElectronicsSection() {
+        ThreadManager.runAmazonTests();
         shoppingCartPage.navigateToSection(
                 ELECTRONICS_SECTION,
                 PHOTO_SUBSECTION,
@@ -94,6 +96,7 @@ public class AddingTests {
     @DisplayName("Поиск 'Macbook Pro' и добавление в корзину")
     @Severity(SeverityLevel.BLOCKER)
     void searchWithSearchField() {
+        ThreadManager.runAmazonTests();
         shoppingCartPage.searchItem("Macbook Pro");
         shoppingCartPage.addToCart(
                 ADD_TO_CART_BUTTON_FOR_MACBOOK
@@ -105,6 +108,7 @@ public class AddingTests {
     @Severity(SeverityLevel.BLOCKER)
     void testRemoveAllMethod() throws InterruptedException {
         // 1. Добавить товары в корзину
+        ThreadManager.runAmazonTests();
         shoppingCartPage.navigateToSection(
                 ELECTRONICS_SECTION,
                 PHOTO_SUBSECTION,
