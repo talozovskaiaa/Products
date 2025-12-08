@@ -31,7 +31,9 @@ public class HomePage {
         this.elementToHover = page.locator("#nav-link-accountList");
     }
 
-    // Метод для авторизации
+    /**
+     * Метод для авторизации
+     */
     public void loginWithValidUser(String login, String password ) {
         signInButtton.click();
         emailField.fill(login);
@@ -41,7 +43,10 @@ public class HomePage {
         logoAmazonInHeader.isVisible();
     }
 
-    // Метод для разавторизации
+    /**
+     * Метод для разавторизации
+     * Выполняет hover по элементу и клик по кнопке выхода
+     */
     public void sighOut() {
         elementToHover.hover();
         signOutButton.click();

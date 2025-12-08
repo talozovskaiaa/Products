@@ -9,12 +9,20 @@ public class RemoveAllServicesExample {
     private final Locator delete;
     private final Locator deleteApprove;
 
+    /**
+     * Конструктор для инициализации локаторов элементов на странице,
+     * используемых при удалении всех сервисов/услуг.
+     */
     public RemoveAllServicesExample(Page page) {
         this.navArrowDown = page.locator(".a-icon.a-icon-small-remove");
         this.delete = page.locator("input[data-action='delete-active']");
         this.deleteApprove = page.locator("your-confirm-delete-button-selector");
     }
 
+    /**
+     * Метод для удаления всех товаров в корзине
+     * Сейчас не работает, его надо поправить и довести до ума
+     */
     public void removeAll() throws InterruptedException {
         Page page = navArrowDown.page();
 

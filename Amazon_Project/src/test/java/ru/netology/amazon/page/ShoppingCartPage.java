@@ -3,8 +3,6 @@ package ru.netology.amazon.page;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 
-import java.util.List;
-
 public class ShoppingCartPage {
 
     private final Page page;
@@ -36,7 +34,9 @@ public class ShoppingCartPage {
         this.page = page;
     }
 
-    // Метод для перехода в любой раздел
+    /**
+     * Метод для перехода в любой раздел бокового меню
+     */
     public void navigateToSection(String sectionSelector, String subsectionSelector, String headerSelector) {
         page.locator(NAVIGATION_MENU).click();
         page.locator(sectionSelector).first().click();
@@ -48,7 +48,9 @@ public class ShoppingCartPage {
         page.locator(headerSelector).first().waitFor();
     }
 
-    // Добавление товара в корзину и переход в корзину
+    /**
+     * Добавление товара в корзину и переход в корзину
+     */
     public void addToCart(String locatorByAddToCartButton) {
         page.locator(locatorByAddToCartButton)
 //                .first()
@@ -66,7 +68,9 @@ public class ShoppingCartPage {
         navigateToCart();
     }
 
-    // Поиск товара
+    /**
+     * Метод для поиска товара через поисковую строку
+     */
     public void searchItem(String items) {
         page.locator(SEARCH_FIELD).waitFor(new Locator.WaitForOptions().setTimeout(10000));
         page.locator(SEARCH_FIELD).click();
@@ -79,23 +83,35 @@ public class ShoppingCartPage {
         page.locator(CONFIRMATION_OF_ITEM_ADDITION);
     }
 
+    /**
+     * Метод для перехода в корзину
+     */
     public void navigateToCart() {
         page.locator(CART_BUTTON).waitFor(new Locator.WaitForOptions().setTimeout(10000));
         page.locator(CART_BUTTON).click();
         page.locator(SHOPPING_CART).waitFor();
     }
 
+    /**
+     * Метод для уменьшения количества товара в корзине на один
+     */
     public void decreaseTheNumberInCart() {
         page.locator(DECREASE_THE_NUMBER_IN_CART)
                 .first()
                 .click(new Locator.ClickOptions().setTimeout(5000));
     }
 
+    /**
+     * Метод для удаления товара из корзины
+     */
     public void deleteAnItemsFromTheCart(String locator_by_delete_button, String text_after_deletion) {
         page.click(locator_by_delete_button);
         page.waitForSelector(text_after_deletion);
     }
 
+    /**
+     * Метод нажатия на кнопку Продолжить оформление заказа
+     */
     public void proceedToCheckout() {
         page.locator(PROCEED_TO_CHECKOUT)
                 .click(new Locator.ClickOptions()
@@ -104,6 +120,9 @@ public class ShoppingCartPage {
         page.locator(HEADER_SECURE_CHECKOUT).waitFor(new Locator.WaitForOptions().setTimeout(10000));
     }
 
+    /**
+     * Метод для добавления нового адреса при оформлении заказа
+     */
     public void addANewAddress(String phone_number, String address, String suite_number) {
         page.locator(ADD_A_NEW_DELIVERY_ADDRESS).click();
         page.locator(PHONE_NUMBER_FIELD).fill(phone_number);
@@ -115,16 +134,10 @@ public class ShoppingCartPage {
         element.click();
     }
 
+    /**
+     * Локатор для счетчика товаров в корзине
+     */
     public int getCartItemsCount() {
-        // Локатор для счетчика товаров в корзине
         return Integer.parseInt(page.locator("#nav-cart-count").innerText());
-    }
-
-    public boolean isCartEmptyMessageDisplayed() {
-        return page.locator("h3:has-text('Your Amazon Cart is empty')").isVisible();
-    }
-
-    public List<String> getCartItemsTitles() {
-        return page.locator("[data-name='Active Items'] .sc-product-title").allInnerTexts();
     }
 }
