@@ -54,7 +54,9 @@ public class MockTest {
                     .setContentType("application/json")
                     .setBody(mockResponse));
         });
-        page.navigate("https://www.amazon.com");
+        Response response = page.navigate("https://www.amazon.com");
+        Assertions.assertEquals(200, response.status(),
+                "Товары успешно найдены");
     }
 
     @Test
@@ -75,7 +77,9 @@ public class MockTest {
                     .setContentType("application/json")
                     .setBody(mockResponse));
         });
-        page.navigate("https://www.amazon.com/gp/cart/view.html");
+        Response response = page.navigate("https://www.amazon.com/gp/cart/view.html");
+        Assertions.assertEquals(200, response.status(),
+                "Страница должна загрузиться успешно");
     }
 
     @Test
@@ -100,7 +104,9 @@ public class MockTest {
                     .setBody(mockResponse));
         });
 
-        page.navigate("https://www.amazon.com/ap/signin");
+        Response response = page.navigate("https://www.amazon.com/ap/signin");
+        Assertions.assertEquals(200, response.status(),
+                "Пользователь авторизован успешно");
     }
 
     @AfterEach
