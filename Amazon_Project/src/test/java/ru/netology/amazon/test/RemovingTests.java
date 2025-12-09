@@ -67,7 +67,7 @@ public class RemovingTests {
     @DisplayName("Removing an item from the cart")
     @Severity(SeverityLevel.BLOCKER)
     void removingAnItemFromTheCart() {
-        ThreadManager.runAmazonTests();
+//        ThreadManager.runAmazonTests();
         shoppingCartPage.deleteAnItemsFromTheCart("input[data-action=\"delete-active\"][type=\"submit\"]", "sc-list-item-removed-msg-text-delete-5e80513f-c676-4c8a-bc75-17b8d0bc6804");
     }
 }
