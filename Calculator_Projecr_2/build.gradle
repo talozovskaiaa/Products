@@ -1,0 +1,43 @@
+plugins {
+    id 'java'
+    id 'jacoco'
+    id 'checkstyle'
+}
+
+group = 'ru.java.mifi.demo'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation 'com.microsoft.playwright:playwright:1.56.0'
+}
+
+test {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport // Ensure report generation after tests
+}
+
+jacoco {
+    toolVersion = "0.8.11" // Specify the JaCoCo tool version
+}
+
+checkstyle {
+    toolVersion = '10.12.1'
+    configFile = file("checkstyle.xml")
+    ignoreFailures = false
+    showViolations = true
+}
+
+jacocoTestReport {
+    reports {
+        html.required = true // Enable HTML report
+    }
+    // Customize destination directories if needed
+    // reports.html.outputLocation = layout.buildDirectory.dir("jacocoHtml")
+}
