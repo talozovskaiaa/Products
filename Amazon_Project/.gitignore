@@ -65,3 +65,118 @@ logs/
 # Temporary files
 *.tmp
 *.temp
+
+# ============ ДОБАВЛЕНО ДЛЯ ВАШЕГО СЛУЧАЯ ============
+
+# macOS system files
+.CFUserTextEncoding
+.Trash/
+.Spotlight-V100/
+.TemporaryItems/
+.fseventsd/
+
+# IDE and editor files
+*.swp
+*.swo
+*.save
+
+# Package managers and dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Android
+.android/
+.gradle/
+local.properties
+
+# Docker
+.docker/
+docker-compose.*.yml
+
+# Development tools
+.anyconnect
+.anydesk/
+.appium/
+.atom/
+.bxd/
+.cache/
+.cisco/
+.colima/
+.idlerc/
+.jenkins/
+.m2/
+.mongodb/
+.npm/
+.nvm/
+.openjfx/
+.proxyman/
+.skiko/
+.soapuios/
+.spoofdpi/
+.swiftpm/
+
+# SSH and security
+.ssh/
+*.pem
+*.key
+
+# Shell and terminal
+.bash_profile
+.bash_profile.*
+.zshrc
+.zshrc.*
+.zcompdump
+.zprofile
+.zsh_sessions/
+.viminfo
+.lesshst
+
+# User directories
+Desktop/
+Documents/
+Downloads/
+Movies/
+Music/
+Pictures/
+Public/
+Library/
+Applications/
+
+# Project directories (если это не основной проект)
+AndroidStudioProjects/
+IdeaProjects/
+JavaAppium/
+BDD_Project/
+Calculator_Project/
+Calculator_Projecr_2/  # если это не основной проект
+Patterns_API_Project/
+Patterns_Project/
+Project_Docker/
+ScreenshotTestsProject/
+Selenium_Homework/
+Selenium_Homework_New/
+SoapUI-Tutorials/
+SQL_Project/
+
+# Yandex
+.yandex/
+
+# Test and build artifacts
+libs/
+maven/
+my-app/
+admin/
+github/
+github1/
+
+# Specific files from your list
+android.log
+default-soapui-workspace.xml
+Project-1-soapui-project.xml
+Test-soapui-project.xml
+soap-soapui-project.xml
+soapui-settings.xml
+Desktopactivity.txt
+runemulator.sh
+"runemulator.sh\r"  # для файла с кавычками в имени
