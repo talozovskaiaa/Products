@@ -37,9 +37,9 @@ dependencies {
     testImplementation 'org.junit.platform:junit-platform-suite'
 
     // Playwright
-    testImplementation 'com.microsoft.playwright:playwright:1.42.0'
-    implementation 'com.microsoft.playwright:playwright:1.42.0'
-    playwrightBrowsers 'com.microsoft.playwright:driver-bundle:1.42.0'
+    testImplementation 'com.microsoft.playwright:playwright:1.57.0'
+    implementation 'com.microsoft.playwright:playwright:1.57.0'
+    playwrightBrowsers 'com.microsoft.playwright:driver-bundle:1.57.0'
 
     // Faker for test data
     testImplementation 'com.github.javafaker:javafaker:1.0.2'
