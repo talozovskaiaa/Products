@@ -10,10 +10,16 @@ public class Book extends Product {
         this.author = author;
     }
 
+    /**
+     * Метод для получения автора
+     */
     public String getAuthor() {
         return author;
     }
 
+    /**
+     * Метод для получения названия книги
+     */
     public String getBooksName() {
         return booksName;
     }

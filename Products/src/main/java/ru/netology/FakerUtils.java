@@ -12,6 +12,9 @@ public class FakerUtils {
     private FakerUtils() {
     }
 
+    /**
+     * Метод для генерации имени продукта
+     */
     public static String generateRandomProducts() {
         String[] names = {
                 "products1", "products2", "products3", "products4",
@@ -24,30 +27,51 @@ public class FakerUtils {
         return names[random.nextInt(names.length)];
     }
 
+    /**
+     * Метод для генерации ID
+     */
     public static int generateRandomID() {
         return faker.number().numberBetween(1, 1000);
     }
 
+    /**
+     * Метод для генерации цены
+     */
     public static int generatePrice() {
         return faker.number().numberBetween(100, 1000);
     }
 
+    /**
+     * Метод для генерации названии книги
+     */
     public static String generateBooksName() {
         return faker.book().title();
     }
 
+    /**
+     * Метод для генерации автора книги
+     */
     public static String generateAuthor() {
         return faker.book().author();
     }
 
+    /**
+     * Метод для генерации названия смартфона
+     */
     public static String generateSmartphonesName() {
         return faker.app().name();
     }
 
+    /**
+     * Метод для генерации названия компании
+     */
     public static String generateManufacturer() {
         return faker.company().name();
     }
 
+    /**
+     * Метод для генерации полного набора данных книги
+     */
     public static Book generateBook() {
         return new Book(
                 generateRandomID(),
@@ -58,6 +82,9 @@ public class FakerUtils {
         );
     }
 
+    /**
+     * Метод для генерации полного набора данных смартфона
+     */
     public static Smartphone generateSmartphone() {
         return new Smartphone(
                 generateRandomID(),

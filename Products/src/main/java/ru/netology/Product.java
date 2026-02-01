@@ -10,14 +10,24 @@ public class Product {
         this.name = name;
         this.price = price;
     }
+
+    /**
+     * Метод для получения ID
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Метод для получения названия
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Метод для получения цены
+     */
     public int getPrice() {
         return price;
     }

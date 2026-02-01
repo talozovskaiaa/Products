@@ -10,10 +10,16 @@ public class Smartphone extends Product {
         this.manufacturer = manufacturer;
     }
 
+    /**
+     * Метод для получения названия смартфона
+     */
     public String getSmartphonesName() {
         return smartphonesName;
     }
 
+    /**
+     * Метод для получения названия компании
+     */
     public String getManufacturer() {
         return manufacturer;
     }
