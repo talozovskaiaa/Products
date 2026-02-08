@@ -37,6 +37,23 @@ public class BooksRepositoryTest {
     }
 
     @Test
+    public void removingTheNonExistentBookByIdTest() {
+        Book[] books = {item1, item2, item3, item4, item5, item6, item7, item8};
+        for (Book book : books) {
+            productRepository.save(book);
+        }
+        NotFoundException exception = Assertions.assertThrows(
+                NotFoundException.class,
+                () -> productRepository.removeById(2000)
+        );
+        Assertions.assertEquals(
+                "Element with id: 2000 not found",
+                exception.getMessage()
+        );
+    }
+
+
+    @Test
     public void addingNewBookTest() {
         productRepository.save(item1);
         productRepository.save(item2);

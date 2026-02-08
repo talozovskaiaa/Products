@@ -19,6 +19,12 @@ public class ProductRepository {
      * метод для удаления одного из элементов массива
      */
     public void removeById(int id) {
+
+        Product found = findById(id);
+        if (found == null) {
+            throw new NotFoundException("Element with id: " + id + " not found");
+        }
+
         Product[] newProducts = new Product[products.length - 1];
         int a = 0;
         for (Product product : products) {
@@ -28,6 +34,18 @@ public class ProductRepository {
             }
         }
         products = newProducts;
+    }
+
+    /**
+     * метод для поиска элемента по id
+     */
+    public Product findById(int id) {
+        for (Product product : products) {
+            if (product.getId() == id) {
+                return product;
+            }
+        }
+        return null;
     }
 
     /**
