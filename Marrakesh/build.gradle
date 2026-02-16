@@ -48,6 +48,10 @@ dependencies {
     //MySQL
     testImplementation 'mysql:mysql-connector-java:8.0.33'
     testImplementation 'commons-dbutils:commons-dbutils:1.7'
+
+    implementation 'io.github.cdimascio:dotenv-java:3.0.0'
+
+    testImplementation 'org.postgresql:postgresql:42.7.3'
 }
 
 test {
