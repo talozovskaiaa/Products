@@ -1,6 +1,6 @@
 package ru.netology;
 
-public class Product {
+public abstract class Product implements Usable {
     protected int id;
     protected String name;
     protected int price;
@@ -30,5 +30,10 @@ public class Product {
      */
     public int getPrice() {
         return price;
+    }
+
+    @Override
+    public void use() {
+        System.out.println("Продукт " + name + " используется");
     }
 }

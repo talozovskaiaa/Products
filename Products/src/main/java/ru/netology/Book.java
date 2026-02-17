@@ -10,6 +10,11 @@ public class Book extends Product {
         this.author = author;
     }
 
+    @Override
+    public void use() {
+        System.out.println("Читаем книгу: " + name);
+    }
+
     /**
      * Метод для получения автора
      */
